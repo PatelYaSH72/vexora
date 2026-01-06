@@ -104,7 +104,7 @@ const VexoraaAgencyLuxury = () => {
         </motion.section>
 
         {/* SECTION 2: PHILOSOPHY */}
-        <section style={{ padding: isMobile ? '80px 5%' : '180px 10%', textAlign: 'center' }}>
+        <section style={{marginBottom: isMobile ? '50%' : '', padding: isMobile ? '20px 5%' : '180px 10%', textAlign: 'center' }}>
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1.2 }} style={{ fontSize: isMobile ? '1.2rem' : '2.2rem', fontFamily: "'Playfair Display', serif", fontWeight: '300', lineHeight: 1.6 }}>
             Engineering <span style={{ fontStyle: 'italic', opacity: 0.4 }}>silent</span> dominance <br /> 
             through <motion.span whileHover={{ color: deepGold }} style={{ transition: 'color 0.4s', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>architectural</motion.span> tailoring.
