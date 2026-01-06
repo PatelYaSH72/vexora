@@ -127,7 +127,7 @@ const VexoraaAgencyLuxury = () => {
         </section>
 
         {/* SECTION 4: THE JOIN (FORM LOGIC ADDED) */}
-        <section id="join" style={{ padding: isMobile ? '80px 8%' : '200px 10%', textAlign: 'center' }}>
+        <section id="join" style={{ marginTop: isMobile ? '170px' : '',marginBottom: isMobile ? '120px' : '', padding: isMobile ? '80px 8%' : '200px 10%', textAlign: 'center' }}>
           <div style={{ maxWidth: '600px', margin: '0 auto' }}>
             <h2 style={{ fontSize: isMobile ? '1.6rem' : '3.5rem', fontFamily: "'Playfair Display', serif", fontWeight: '300', marginBottom: isMobile ? '30px' : '80px' }}>Join the Archive</h2>
             <form onSubmit={handleSendEmail} style={{ position: 'relative' }}>
