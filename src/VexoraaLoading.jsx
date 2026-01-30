@@ -14,6 +14,7 @@ const VexoraaAgencyLuxury = () => {
   const { scrollYProgress } = useScroll();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  
 
   // --- EMAILJS LOGIC ---
   const [email, setEmail] = useState("");
@@ -25,40 +26,44 @@ const taupe = "#D1C7BD";
 const bronze = "#8E795E";
 const offWhite = "#F0EEE9";
 
+useEffect(() => {
+  console.log("STATUS CHANGED:", status);
+}, [status]);
+
+
   const handleSendEmail = async (e) => {
-    e.preventDefault();
-    if (!email) return;
-    setStatus("Sending...");
+  e.preventDefault();
 
-   try {
+  if (!email || status === "Sended") return;
 
-    console.log("run");
-    
+  setStatus("Sended ✅");
 
-    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/sendEmail`, {
-      name,
-      email,
-    });
+  try {
+    await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/sendEmail`,
+      { name, email }
+    );
 
-    console.log(res);
-    
-    setStatus("Request →");
-    setName("");
+    setStatus("Sent ✅");
+
+    setTimeout(() => {
+      setStatus("Request →");
+    }, 3000);
     setEmail("");
-    
-   } catch (error) {
-    
-   }
+    setName("");
 
-    const templateParams = {
-      user_email: email,
-      time: new Date().toLocaleString(),
-    };
+  } catch (err) {
+    setStatus("Failed ❌");
 
-   
+    setTimeout(() => {
+      setStatus("Request →");
+    }, 3000);
+  }
+};
 
 
-  };
+
+
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -497,31 +502,31 @@ const offWhite = "#F0EEE9";
 
     {/* SUBMIT BUTTON */}
     <motion.button
-      type="submit"
-      whileHover={{ 
-        y: -3, 
-        color: bronze,
-        letterSpacing: "0.8rem" // Hover par button thoda expand hoga
-      }}
-      transition={{ duration: 0.4 }}
-      style={{
-        marginTop: "60px", // Text fields se clear separation
-        background: "none",
-        border: `1px solid ${navy}`, // Button ko ek frame diya
-        padding: "15px 40px", // Luxury buttons aksar wide hote hain
-        cursor: "pointer",
-        fontSize: "0.7rem",
-        letterSpacing: "0.5rem",
-        textTransform: "uppercase",
-        color: navy,
-        fontWeight: "600",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {status || "Submit"}
-    </motion.button>
+  type="submit"
+  disabled={status === "Sending..."}
+  whileHover={status === "Request →" ? {
+    y: -3,
+    color: bronze,
+    letterSpacing: "0.8rem",
+  } : {}}
+  transition={{ duration: 0.4 }}
+  style={{
+    marginTop: "60px",
+    background: "none",
+    border: `1px solid ${navy}`,
+    padding: "15px 40px",
+    cursor: status === "Sending..." ? "not-allowed" : "pointer",
+    fontSize: "0.7rem",
+    letterSpacing: "0.5rem",
+    textTransform: "uppercase",
+    color: navy,
+    fontWeight: "600",
+    opacity: status === "Sending..." ? 0.6 : 1,
+  }}
+>
+  {status}
+</motion.button>
+
   </form>
           </div>
         </section>
