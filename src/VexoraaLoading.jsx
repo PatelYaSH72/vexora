@@ -8,6 +8,7 @@ import {
 import { Instagram, ArrowRight } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import vexoraaLogo from "../public/Dark_Wordmark.png";
+import axios from 'axios';
 
 const VexoraaAgencyLuxury = () => {
   const { scrollYProgress } = useScroll();
@@ -16,33 +17,44 @@ const VexoraaAgencyLuxury = () => {
 
   // --- EMAILJS LOGIC ---
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [status, setStatus] = useState("Request →");
 
-  const handleSendEmail = (e) => {
+  const navy = "#1B2A41";
+const taupe = "#D1C7BD";
+const bronze = "#8E795E";
+const offWhite = "#F0EEE9";
+
+  const handleSendEmail = async (e) => {
     e.preventDefault();
     if (!email) return;
     setStatus("Sending...");
 
-    const serviceID = "service_9zqbbg5";
-    const templateID = "template_ltgr76s";
-    const publicKey = "1TT8oHJtHCQ5NclUm";
+   try {
+
+    console.log("run");
+    
+
+    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/sendEmail`, {
+      name,
+      email,
+    });
+
+    console.log(res);
+    
+    
+   } catch (error) {
+    
+   }
 
     const templateParams = {
       user_email: email,
       time: new Date().toLocaleString(),
     };
 
-    emailjs
-      .send(serviceID, templateID, templateParams, publicKey)
-      .then(() => {
-        setStatus("Access Requested.");
-        setEmail("");
-        setTimeout(() => setStatus("Request Access →"), 3000);
-      })
-      .catch((err) => {
-        console.error("FAILED...", err);
-        setStatus("Error. Try Again.");
-      });
+   
+
+
   };
 
   useEffect(() => {
@@ -417,44 +429,97 @@ const VexoraaAgencyLuxury = () => {
             >
               Join the Waitlist
             </h2>
-            <form onSubmit={handleSendEmail} style={{ position: "relative" }}>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="EMAIL ADDRESS"
-                style={{
-                  width: "100%",
-                  background: "transparent",
-                  border: "none",
-                  borderBottom: "1px solid rgba(0,0,0,0.15)",
-                  padding: "20px 0",
-                  textAlign: "center",
-                  letterSpacing: "0.5rem",
-                  fontSize: "0.8rem",
-                  outline: "none",
-                  borderRadius: 0,
-                }}
-              />
-              <motion.button
-                type="submit"
-                whileHover={{ y: -5, color: deepGold }}
-                style={{
-                  marginTop: "50px",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.5rem",
-                  textTransform: "uppercase",
-                  color: charcoal,
-                  fontWeight: "500",
-                }}
-              >
-                {status}
-              </motion.button>
-            </form>
+            <form 
+    onSubmit={handleSendEmail} 
+    style={{ 
+      position: "relative", 
+      maxWidth: "600px", 
+      margin: "4rem auto", // Form ko page par thodi saans lene ki jagah di
+      padding: "0 1rem",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center"
+    }}
+  >
+    {/* NAME FIELD */}
+    <input
+      type="text"
+      required
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      placeholder="FULL NAME"
+      style={{
+        width: "100%",
+        background: "transparent",
+        border: "none",
+        borderBottom: `1px solid ${taupe}`, // Light taupe border for luxury feel
+        padding: "25px 0", // Padding thodi badhayi readability ke liye
+        textAlign: "center",
+        letterSpacing: "0.6rem", // Widened for premium look
+        fontSize: "0.75rem",
+        outline: "none",
+        borderRadius: 0,
+        color: navy,
+        transition: "border-color 0.4s ease",
+      }}
+      onFocus={(e) => e.target.style.borderColor = bronze}
+      onBlur={(e) => e.target.style.borderColor = taupe}
+    />
+
+    {/* EMAIL FIELD */}
+    <input
+      type="email"
+      required
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="EMAIL ADDRESS"
+      style={{
+        width: "100%",
+        background: "transparent",
+        border: "none",
+        borderBottom: `1px solid ${taupe}`,
+        padding: "25px 0",
+        marginTop: "10px", // Dono fields ke beech slight breathing space
+        textAlign: "center",
+        letterSpacing: "0.6rem",
+        fontSize: "0.75rem",
+        outline: "none",
+        borderRadius: 0,
+        color: navy,
+        transition: "border-color 0.4s ease",
+      }}
+      onFocus={(e) => e.target.style.borderColor = bronze}
+      onBlur={(e) => e.target.style.borderColor = taupe}
+    />
+
+    {/* SUBMIT BUTTON */}
+    <motion.button
+      type="submit"
+      whileHover={{ 
+        y: -3, 
+        color: bronze,
+        letterSpacing: "0.8rem" // Hover par button thoda expand hoga
+      }}
+      transition={{ duration: 0.4 }}
+      style={{
+        marginTop: "60px", // Text fields se clear separation
+        background: "none",
+        border: `1px solid ${navy}`, // Button ko ek frame diya
+        padding: "15px 40px", // Luxury buttons aksar wide hote hain
+        cursor: "pointer",
+        fontSize: "0.7rem",
+        letterSpacing: "0.5rem",
+        textTransform: "uppercase",
+        color: navy,
+        fontWeight: "600",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {status || "Submit"}
+    </motion.button>
+  </form>
           </div>
         </section>
 
@@ -472,12 +537,15 @@ const VexoraaAgencyLuxury = () => {
         >
           <p>VEXORAA LIFESTYLE</p>
           <div style={{ display: "flex", gap: "30px" }}>
-            <motion.div
+            <motion.a
+              
               whileHover={{ color: deepGold, opacity: 1 }}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", opacity: 0.6, color: "#1a1a1a" }}
+              target="_blank"
+              href="https://www.instagram.com/vexoraa.in/"
             >
               <Instagram size={16} strokeWidth={1.5} />
-            </motion.div>
+            </motion.a>
             <p>© 2026</p>
           </div>
         </footer>
