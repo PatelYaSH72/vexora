@@ -42,6 +42,9 @@ const offWhite = "#F0EEE9";
 
     console.log(res);
     
+    setStatus("Request →");
+    setName("");
+    setEmail("");
     
    } catch (error) {
     
