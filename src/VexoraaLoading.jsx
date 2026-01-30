@@ -9,6 +9,7 @@ import { Instagram, ArrowRight } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import vexoraaLogo from "../public/Dark_Wordmark.png";
 import axios from 'axios';
+// import { set } from "mongoose";
 
 const VexoraaAgencyLuxury = () => {
   const { scrollYProgress } = useScroll();
@@ -19,7 +20,9 @@ const VexoraaAgencyLuxury = () => {
   // --- EMAILJS LOGIC ---
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("Request →");
+ const [status, setStatus] = useState("Request →");
+
+
 
   const navy = "#1B2A41";
 const taupe = "#D1C7BD";
@@ -31,12 +34,15 @@ useEffect(() => {
 }, [status]);
 
 
-  const handleSendEmail = async (e) => {
+ const handleSendEmail = async (e) => {
   e.preventDefault();
+  if (!email) return;
 
-  if (!email || status === "Sended") return;
+  setStatus("Sending...");
 
-  setStatus("Sended ✅");
+  setTimeout(() => {
+    setStatus("Sended ✅");
+  }, 2000);
 
   try {
     await axios.post(
@@ -44,22 +50,23 @@ useEffect(() => {
       { name, email }
     );
 
-    setStatus("Sent ✅");
-
-    setTimeout(() => {
-      setStatus("Request →");
-    }, 3000);
-    setEmail("");
+    // ✅ sirf last me fields empty karo
     setName("");
+    setEmail("");
 
-  } catch (err) {
-    setStatus("Failed ❌");
-
-    setTimeout(() => {
-      setStatus("Request →");
-    }, 3000);
+  } catch (error) {
+    console.error("REQUEST FAILED", error);
+    
+    // ✅ error hone pe bhi fields empty
+    setName("");
+    setEmail("");
   }
 };
+
+
+
+
+
 
 
 
@@ -502,13 +509,16 @@ useEffect(() => {
 
     {/* SUBMIT BUTTON */}
     <motion.button
+    key={status}
   type="submit"
   disabled={status === "Sending..."}
-  whileHover={status === "Request →" ? {
-    y: -3,
-    color: bronze,
-    letterSpacing: "0.8rem",
-  } : {}}
+   whileHover={{
+    y: -3,            // thoda upar uthta hai
+    scale: 1.02,      // thoda bada ho jaye
+    letterSpacing: "0.8rem", // text thoda spread ho jaye
+    backgroundColor: "#1B2A41", // dark blue
+    color: "#F0EEE9"  // off white
+  }}
   transition={{ duration: 0.4 }}
   style={{
     marginTop: "60px",
@@ -526,6 +536,9 @@ useEffect(() => {
 >
   {status}
 </motion.button>
+
+
+
 
   </form>
           </div>
