@@ -46,7 +46,7 @@ useEffect(() => {
 
   try {
     await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/user/sendEmail`,
+      `https://vexora-backend.onrender.com/api/user/sendEmail`,
       { name, email }
     );
 
