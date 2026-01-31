@@ -29,6 +29,9 @@ const taupe = "#D1C7BD";
 const bronze = "#8E795E";
 const offWhite = "#F0EEE9";
 
+console.log("BACKEND URL:", import.meta.env.VITE_BACKEND_URL);
+
+
 useEffect(() => {
   console.log("STATUS CHANGED:", status);
 }, [status]);
