@@ -9,6 +9,7 @@ import { Instagram, ArrowRight } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import vexoraaLogo from "../public/Dark_Wordmark.png";
 import axios from 'axios';
+// import addToGoogleSheet from "./googleSheet";
 // import { set } from "mongoose";
 
 const VexoraaAgencyLuxury = () => {
@@ -37,32 +38,53 @@ useEffect(() => {
 }, [status]);
 
 
+const SERVICE_ID = "service_wk397cv";
+const TEMPLATE_ID = "template_d93qrat";
+const PUBLIC_KEY = "2cCGndisEppl2iW1H";
+
+
  const handleSendEmail = async (e) => {
   e.preventDefault();
-  if (!email) return;
+  if (!email || !name) return;
 
   setStatus("Sending...");
 
-  setTimeout(() => {
-    setStatus("Sended ✅");
-  }, 2000);
+  // 1. EmailJS Parameters
+  const templateParams = {
+    name: name,
+    to_email: email,
+    email_title: "PRIORITY ACCESS CONFIRMED",
+  };
 
   try {
-    await axios.post(
-      `https://vexora-backend.onrender.com/api/user/sendEmail`,
-      { name, email }
-    );
+    // --- PEHLA KAAM: Email bhejna (EmailJS) ---
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+    console.log("Email Sent Successfully");
 
-    // ✅ sirf last me fields empty karo
+    // --- DUSRA KAAM: Excel me save karna (SheetDB) ---
+    // Yahan apna SheetDB URL paste karein
+    const sheetDB_URL = "https://sheetdb.io/api/v1/r6rwa3qvyxpya"; 
+    
+    await axios.post(sheetDB_URL, {
+      data: [
+        {
+          name: name,
+          email: email,
+          date: new Date().toLocaleString() // Optional: Date bhi save ho jayegi
+        }
+      ]
+    });
+    console.log("Data added to Excel Successfully");
+
+    setStatus("Sended ✅");
     setName("");
     setEmail("");
+    setTimeout(() => setStatus("Request →"), 3000);
 
   } catch (error) {
-    console.error("REQUEST FAILED", error);
-    
-    // ✅ error hone pe bhi fields empty
-    setName("");
-    setEmail("");
+    console.error("FAILED...", error);
+    setStatus("Error ❌");
+    setTimeout(() => setStatus("Request →"), 3000);
   }
 };
 
