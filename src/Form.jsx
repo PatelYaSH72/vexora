@@ -113,7 +113,7 @@ const PUBLIC_KEY = "2cCGndisEppl2iW1H";
 
 
 
-    setStatus("Sended ✅");
+    setStatus("Sent ✅");
 
     setName("");
 
