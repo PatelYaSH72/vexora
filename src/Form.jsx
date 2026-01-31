@@ -12,6 +12,8 @@ import axios from 'axios';
 // import addToGoogleSheet from "./googleSheet";
 // import { set } from "mongoose";
 
+
+
 const VexoraaAgencyLuxury = () => {
   const { scrollYProgress } = useScroll();
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -30,7 +32,7 @@ const taupe = "#D1C7BD";
 const bronze = "#8E795E";
 const offWhite = "#F0EEE9";
 
-console.log("BACKEND URL:", import.meta.env.VITE_BACKEND_URL);
+
 
 
 useEffect(() => {
@@ -43,49 +45,94 @@ const TEMPLATE_ID = "template_d93qrat";
 const PUBLIC_KEY = "2cCGndisEppl2iW1H";
 
 
- const handleSendEmail = async (e) => {
+
+
+  const handleSendEmail = async (e) => {
+
   e.preventDefault();
+
   if (!email || !name) return;
+
+
 
   setStatus("Sending...");
 
+
+
   // 1. EmailJS Parameters
+
   const templateParams = {
+
     name: name,
+
     to_email: email,
+
     email_title: "PRIORITY ACCESS CONFIRMED",
+
   };
 
+
+
   try {
+
     // --- PEHLA KAAM: Email bhejna (EmailJS) ---
+
     await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+
     console.log("Email Sent Successfully");
 
+
+
     // --- DUSRA KAAM: Excel me save karna (SheetDB) ---
+
     // Yahan apna SheetDB URL paste karein
+
     const sheetDB_URL = "https://sheetdb.io/api/v1/r6rwa3qvyxpya"; 
+
     
+
     await axios.post(sheetDB_URL, {
+
       data: [
+
         {
+
           name: name,
+
           email: email,
+
           date: new Date().toLocaleString() // Optional: Date bhi save ho jayegi
+
         }
+
       ]
+
     });
+
     console.log("Data added to Excel Successfully");
 
+
+
     setStatus("Sended ✅");
+
     setName("");
+
     setEmail("");
+
     setTimeout(() => setStatus("Request →"), 3000);
 
+
+
   } catch (error) {
+
     console.error("FAILED...", error);
+
     setStatus("Error ❌");
+
     setTimeout(() => setStatus("Request →"), 3000);
+
   }
+
 };
 
 

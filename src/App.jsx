@@ -1,5 +1,5 @@
 import React from 'react'
-import VexoraaLanding from './VexoraaLoading'
+import VexoraaLanding from './Form'
 
 const App = () => {
   return (
